@@ -27,7 +27,7 @@
 
 ;;;###autoload
 (defgroup qooxdoo nil
-  "Minor mode `qooxdoo-mode' for working with qooxdoo libs"
+  "Convenience functions for working with qooxdoo apps"
   :prefix "qooxdoo-"
   :group 'convenience)
 
