@@ -38,7 +38,7 @@
 (defun qooxdoo-search-api ()
   "Bring up the qooxdoo docs for the function at point"
   (interactive)
-  (browse-url (concat qooxdoo-search-url (current-word t))))
+  (browse-url (concat qooxdoo-api-url (current-word t))))
 
 (provide 'qooxdoo)
 ;;; qooxdoo.el ends here
