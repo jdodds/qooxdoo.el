@@ -20,9 +20,10 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
+(require 'thingatpt)
 
 ;;;###autoload
 (defgroup qooxdoo nil
@@ -35,10 +36,22 @@
   :type 'string
   :group 'qooxdoo)
 
+(defun qooxdoo-bounds-of-qooxdoo-at-point ()
+  "Return the (possibly chained) class heirarchy at point"
+  (save-excursion
+    (skip-chars-backward "0-9a-zA-z\.")
+    (if (looking-at "[0-9a-zA-z.]+")
+        (cons (point)
+              (match-end 0))
+      nil)))
+
+(put 'qooxdoo 'bounds-of-thing-at-point
+     'qooxdoo-bounds-of-qooxdoo-at-point)
+
 (defun qooxdoo-search-api ()
   "Bring up the qooxdoo docs for the function at point"
   (interactive)
-  (browse-url (concat qooxdoo-api-url (current-word t))))
+  (browse-url (concat qooxdoo-api-url (thing-at-point 'qooxdoo))))
 
 (provide 'qooxdoo)
 ;;; qooxdoo.el ends here
