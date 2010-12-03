@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2010  Jeremiah Dodds
 
-;; Author: Jeremiah Dodds <jdd@destructor.neo.rr.com>
+;; Author: Jeremiah Dodds <jeremiah.dodds@gmail.com>
 ;; Keywords: convenience, docs
 
 ;; This program is free software; you can redistribute it and/or modify
