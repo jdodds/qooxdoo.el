@@ -39,8 +39,8 @@
 (defun qooxdoo-bounds-of-qooxdoo-at-point ()
   "Return the (possibly chained) class heirarchy at point"
   (save-excursion
-    (skip-chars-backward "0-9a-zA-z\.")
-    (if (looking-at "[0-9a-zA-z.]+")
+    (skip-chars-backward "$0-9a-zA-z\._")
+    (if (looking-at "[$0-9a-zA-z._]+")
         (cons (point)
               (match-end 0))
       nil)))
