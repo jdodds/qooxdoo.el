@@ -39,7 +39,6 @@
 
 ;; in your .emacs should do just fine.
 ;;; Code:
-(require 'thingatpt)
 
 ;;;###autoload
 (defgroup qooxdoo nil
@@ -52,6 +51,9 @@
   :type 'string
   :group 'qooxdoo)
 
+;; thingatpt and api search utils
+
+(require 'thingatpt)
 (defun qooxdoo-bounds-of-qooxdoo-at-point ()
   "Return the (possibly chained) class heirarchy at point"
   (save-excursion
