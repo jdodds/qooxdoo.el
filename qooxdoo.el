@@ -46,6 +46,14 @@
   :prefix "qooxdoo-"
   :group 'convenience)
 
+(defcustom qooxdoo-mode-string-format " [%s]"
+  "Format for the mode string. It should start with a space."
+  :group 'qooxdoo
+  :type 'string)
+
+(defcustom qooxdoo-mode-name (format qooxdoo-mode-string-format "qx")
+  "The string to display as the name of qooxdoo-minor-mode")
+
 (defcustom qooxdoo-api-url "http://demo.qooxdoo.org/current/apiviewer/#"
   "URL where the qooxdoo api lives"
   :type 'string
@@ -70,6 +78,22 @@
   "Bring up the qooxdoo docs for the function at point"
   (interactive)
   (browse-url (concat qooxdoo-api-url (thing-at-point 'qooxdoo))))
+
+(defvar qooxdoo-mode-keymap (make-keymap)
+  "keymap for qooxdoo-mode")
+(define-key qooxdoo-mode-keymap (kbd "C-c f") 'qooxdoo-search-api)
+
+;;;###autoload
+(define-minor-mode qooxdoo-minor-mode
+  nil                 ;default docstring
+  nil                 ;initial value
+  qooxdoo-mode-name   ;mode line indicator
+  qooxdoo-mode-keymap ;keymap
+  :group 'qooxdoo)
+
+(defun qooxdo-minor-mode-on ()
+  (interactive)
+  (qooxdoo-minor-mode t))
 
 (provide 'qooxdoo)
 ;;; qooxdoo.el ends here
