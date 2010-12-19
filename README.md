@@ -11,7 +11,7 @@ INSTALLATION
 ============
 
 This is a little awkward, because you probably don't want to turn this on for
-every .js file. The cleanest thing I've found so far is [eproject](https://github.com/jrockway/eproject). Stick
+every .js file. The cleanest thing I've found so far is [eproject](https://github.com/jrockway/eproject) in combination with [espect](https://github.com/rafl/espect). Stick
 something like:
 
     (require 'eproject)
