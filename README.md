@@ -15,18 +15,18 @@ every .js file. The cleanest thing I've found so far is [eproject](https://githu
 something like:
 
     (require 'eproject)
-    (require 'eproject-extras)
     (define-project-type qooxdoo (generic)
       (and (look-for "generator.py")
-      (look-for "Manifest.json")
-      (look-for "config.json"))
+           (look-for "Manifest.json")
+           (look-for "config.json"))
       :relevant-files ("\\.js$"))
-
-    (defun my-qooxdoo-project-file-visit-hook ()
-      (require 'qooxdoo)
-      (with-current-buffer (qooxdoo-minor-mode)))
-
-    (add-hook 'qooxdoo-project-file-visit-hook 'my-qooxdoo-project-file-visit-hook)
+    
+    (require 'espect)
+    (setq espect-buffer-settings
+          '(((:project "qooxdoo")
+             (lambda ()
+               (require 'qooxdoo)
+               (qooxdoo-minor-mode t)))))
 
 In your `~/.emacs` and you should be pretty good to go. If you have a better way
 of doing this, don't hesitate to let me know.
