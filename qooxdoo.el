@@ -91,7 +91,7 @@
   qooxdoo-mode-keymap ;keymap
   :group 'qooxdoo)
 
-(defun qooxdo-minor-mode-on ()
+(defun qooxdoo-minor-mode-on ()
   (interactive)
   (qooxdoo-minor-mode t))
 
