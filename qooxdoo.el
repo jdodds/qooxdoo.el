@@ -20,8 +20,24 @@
 
 ;;; Commentary:
 
-;;
+;; The cleanest way I've found to load this so for is eproject, see
+;; <https://github.com/jrockway/eproject>. Something like:
 
+;; (require 'eproject)
+;;
+;; (define-project-type qooxdoo (generic)
+;;   (and (look-for "generator.py")
+;;        (look-for "Manifest.json")
+;;        (look-for "config.json"))
+;;   :relevant-files ("\\.js$"))
+;;
+;; (defun my-qooxdoo-project-file-visit-hook ()
+;;   (require 'qooxdoo)
+;;   (with-current-buffer (qooxdoo-minor-mode)))
+;;
+;; (add-hook 'qooxdoo-project-file-visit-hook 'my-qooxdoo-project-file-visit-hook)
+
+;; in your .emacs should do just fine.
 ;;; Code:
 (require 'thingatpt)
 
