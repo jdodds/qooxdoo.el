@@ -60,8 +60,44 @@
   :type 'string
   :group 'qooxdoo)
 
-;; thingatpt and api search utils
+(defcustom qooxdoo-workspace-path nil
+  "If you store your code under a shared root, you can put it here"
+  :type 'string
+  :group 'qooxdoo)
 
+(defcustom qooxdoo-project-paths nil
+  "A list of paths containing qooxdoo projects.
+These are prefixed with `qooxdoo-workspace-path'"
+  :type 'list
+  :group 'qooxdoo)
+
+;; set us up to load automatically, requres espect
+(require 'espect)
+
+(defun qooxdoo-normalize-project-path (filename)
+  (concat
+   (file-name-as-directory workspace-path)
+   (file-name-as-directory filename)))
+
+(defun qooxdoo-make-search-targets ()
+  (mapcar
+   '(lambda (i)
+      (cons i (file-name-as-directory buffer-file-name)))
+   (mapcar
+    'qooxdoo-normalize-project-path
+    qooxdoo-project-paths)))
+
+(define-espect-rule :qooxdoo ()
+  (if buffer-file-name  ;; this gets called in the minibuffer for completion as well
+      (and
+       (or
+        (mapcar
+         '(lambda (i)
+            (string-match (car i) (cdr i)))
+         (qooxdoo-make-search-targets)))
+       (string-match "\\.js$" buffer-file-name))))
+
+;; thingatpt and api search utils
 (require 'thingatpt)
 (defun qooxdoo-bounds-of-qooxdoo-at-point ()
   "Return the (possibly chained) class heirarchy at point"
