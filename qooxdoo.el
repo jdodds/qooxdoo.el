@@ -43,8 +43,8 @@
 
 ;; `qooxdoo-project-paths' should be a list of paths to directories containing
 ;; qooxdoo projects. If you're not using `qooxdoo-workspace-path', these should
-;; be absolute. If you are using `qooxdoo-workspace-path', these should be
-;; relative to that.
+;; be absolute. If you are using `qooxdoo-workspace-path', these are interpreted
+;; as relative to that.
 
 ;;; Code:
 
