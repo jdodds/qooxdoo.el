@@ -139,5 +139,9 @@ These are prefixed with `qooxdoo-workspace-path'"
   (interactive)
   (qooxdoo-minor-mode t))
 
+(defun qooxdoo-minor-mode-off ()
+  (interactive)
+  (qooxdoo-minor-mode nil))
+
 (provide 'qooxdoo)
 ;;; qooxdoo.el ends here
