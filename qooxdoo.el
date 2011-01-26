@@ -89,31 +89,10 @@ These are prefixed with `qooxdoo-workspace-path'"
   :type 'list
   :group 'qooxdoo)
 
-;; set us up to load automatically, requres espect
-(require 'espect)
-
-(defun qooxdoo-normalize-project-path (filename)
-  (concat
-   (file-name-as-directory workspace-path)
-   (file-name-as-directory filename)))
-
-(defun qooxdoo-make-search-targets ()
-  (mapcar
-   '(lambda (i)
-      (cons i (file-name-as-directory buffer-file-name)))
-   (mapcar
-    'qooxdoo-normalize-project-path
-    qooxdoo-project-paths)))
-
-(define-espect-rule :qooxdoo ()
-  (if buffer-file-name  ;; this gets called in the minibuffer for completion as well
-      (and
-       (or
-        (mapcar
-         '(lambda (i)
-            (string-match (car i) (cdr i)))
-         (qooxdoo-make-search-targets)))
-       (string-match "\\.js$" buffer-file-name))))
+(defcustom qooxdoo-default-generate-job "source"
+  "The default job to have generate.py run"
+  :type 'string
+  :group 'qooxdoo)
 
 ;; thingatpt and api search utils
 (require 'thingatpt)
@@ -134,6 +113,28 @@ These are prefixed with `qooxdoo-workspace-path'"
   (interactive)
   (browse-url (concat qooxdoo-api-url (thing-at-point 'qooxdoo))))
 
+;; eproject setup, allows us to load when appropriate and provides a nice point
+;; for adding criteria-specific behaviours
+(require 'eproject)
+(require 'eproject-extras)
+
+(define-project-type qooxdoo (generic)
+  (look-for "generate.py")
+  :relevant-files ("\\.js")
+  :irrelevant-files ("cache/" "source/script/" "inspector/" "build/")
+  :main-file "Application.js")
+
+(add-hook 'qooxdoo-project-file-visit-hook
+          'qooxdoo-minor-mode-on)
+
+(defun qooxdoo--parse-errors-filename-function (filename)
+  (format "%s.js" (expand-file-name
+                   (replace-regexp-in-string "\\." "/" filename)
+                   qooxdoo-project-code-root)))
+
+(defvar qooxdoo-project-code-root nil)
+
+
 (defvar qooxdoo-mode-keymap (make-keymap)
   "keymap for qooxdoo-mode")
 (define-key qooxdoo-mode-keymap (kbd "C-c f") 'qooxdoo-search-api)
@@ -148,7 +149,27 @@ These are prefixed with `qooxdoo-workspace-path'"
 
 (defun qooxdoo-minor-mode-on ()
   (interactive)
-  (qooxdoo-minor-mode t))
+  (qooxdoo-minor-mode t)
+  (set (make-local-variable 'compile-command)
+       (format "%sgenerate.py %s" (eproject-root) qooxdoo-default-generate-job))
+  (setq compilation-read-command nil)
+;;  (setq compilation-ask-about-save nil)
+  (setq compilation-auto-jump-to-first-error t)
+  (setq compilation-scroll-output t)
+  (setq qooxdoo-project-code-root (expand-file-name "source/class/" (eproject-root)))
+  (add-hook 'after-save-hook
+            '(lambda ()
+               (with-current-buffer (buffer-name)
+                 (call-interactively 'compile)))
+            nil t)
+  (setq compilation-parse-errors-filename-function 'qooxdoo--parse-errors-filename-function)
+  (add-to-list 'compilation-search-path (format "%s%s" (eproject-root) "source/class/"))
+  (add-to-list 'compilation-error-regexp-alist 'qooxdoo)
+  (add-to-list 'compilation-error-regexp-alist-alist
+               '(qooxdoo
+                 "[ .*-]+\\(Expected[^.]+\\)\. file:\\([^,]+\\), line:\\([^,]+\\), column:\\(.+\\)"
+                 2 3 4 2 1)))
+
 
 (defun qooxdoo-minor-mode-off ()
   (interactive)
