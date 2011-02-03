@@ -89,14 +89,18 @@
   :type 'boolean
   :group 'qooxdoo)
 
-(defcustom qooxdoo-compile-error-alist
-  '(qooxdoo
-    "[ .*-]+\\(Expected[^.]+\\)\. file:\\([^,]+\\), line:\\([^,]+\\), column:\\(.+\\)"
-    2 3 4 2 1)
+(defcustom qooxdoo-compile-error-alist-alist
+  '((qooxdoo-error
+     "[ .*-]+\\(Expected[^.]+\\)\. file:\\([^,]+\\), line:\\([^,]+\\), column:\\(.+\\)"
+     2 3 4 2 1)
+    (qooxdoo-warning-unknown-global-symbol
+     "[ .*-]+Warning: Hint: Unknown global symbol referenced: \\([^q][^x][^ ]+\\) (\\([^:]+\\):\\([^)]+\\)"
+     2 3 nil 1 1))
   "The alist to send to compile mode. This thing, which you can read all about
   in compile.el, roughly reads like 'match these things in the output from our
-  compiler, the 2nd match is the file name, the 3rd the line number, the 4th the
-  line column, it's an error, and highlight the first match."
+  compiler, then takes these numbers to mean 'match number of file name, line
+  number, and line column', then 0 for info, 1 for warning, 2 for error, then
+  'match number to make a hyperlink'"
   :type 'list
   :group 'qooxdoo)
 
@@ -183,10 +187,10 @@
   (setq compilation-parse-errors-filename-function
         'qooxdoo--parse-errors-filename-function)
 
-  (add-to-list 'compilation-error-regexp-alist 'qooxdoo)
+  (dolist (regexp-alist qooxdoo-compile-error-alist-alist)
+    (add-to-list 'compilation-error-regexp-alist-alist regexp-alist)
+    (add-to-list 'compilation-error-regexp-alist (car regexp-alist))))
 
-  (add-to-list 'compilation-error-regexp-alist-alist
-               qooxdoo-compile-error-alist))
 
 (defvar qooxdoo-mode-keymap (make-keymap)
   "keymap for qooxdoo-mode")
