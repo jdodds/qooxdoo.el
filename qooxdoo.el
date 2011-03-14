@@ -94,7 +94,7 @@
      "[ .*-]+\\(Expected[^.]+\\)\. file:\\([^,]+\\), line:\\([^,]+\\), column:\\(.+\\)"
      2 3 4 2 1)
     (qooxdoo-warning-unknown-global-symbol
-     "[ .*-]+Warning: Hint: Unknown global symbol referenced: \\([^q][^x][^ ]+\\) (\\([^:]+\\):\\([^)]+\\)"
+     "[ .*-]+Warning: Hint: Unknown global symbol referenced: \\(\\(?:[^q][^x]\\)\\(?:[^d][^e][^b][^u][^g][^g][^e][^r]\\)[^ ]+\\) (\\([^:]+\\):\\([^)]+\\)"
      2 3 nil 1 1))
   "The alist to send to compile mode. This thing, which you can read all about
   in compile.el, roughly reads like 'match these things in the output from our
